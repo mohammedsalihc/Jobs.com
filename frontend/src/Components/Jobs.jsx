@@ -1,15 +1,18 @@
 
-
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+
+
+import { UserContext } from './context/userContext'
 
 
 function Jobs() {
 
     const [jobs, setJobs] = useState([])
     const [loading, setLoading] = useState(false)
+    const { setUserInfo, userInfo } = useContext(UserContext)
+    const username = userInfo?.email
     const navigate = useNavigate()
-
     const getJobs = async () => {
         setLoading(true)
         await fetch('http://localhost:4000/jobs', {
@@ -22,7 +25,6 @@ function Jobs() {
             })
         })
     }
-
     useEffect(() => {
         getJobs()
     }, [])
@@ -47,6 +49,7 @@ function Jobs() {
 
 
 
+
     const Nodata = () => {
         return (
             <>
@@ -63,19 +66,27 @@ function Jobs() {
     const ShowJobs = () => {
         return (
             <>
+
                 {jobs.map(job => (
                     <>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                            <div className="card shadow-sm">
-                                <div className="card-body">
-                                    <h5 className="card-title fs-4">{job.title}</h5>
-                                    <h6 className="card-subtitle lead fs-6">{job.date}</h6>
-                                    <p className="card-text">Salary: {job.salary}</p>
-                                    <p className="card-text">Openings: {job.openings}</p>
-                                    <button onClick={() => deleteJobs(job._id)} className="btn btn-danger "> Delete<i class="fa-solid fa-trash ms-2 "></i></button>
+                        {username && (
+                            <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                                <div className="card shadow-sm">
+                                    <div className="card-body">
+                                        <h5 className="card-title fs-4">{job.title}</h5>
+                                        <h6 className="card-subtitle lead fs-6">{job.date}</h6>
+                                        <p className="card-text">Salary: {job.salary}</p>
+                                        <p className="card-text">Openings: {job.openings}</p>
+                                        <button onClick={() => deleteJobs(job._id)} className="btn btn-danger "> Delete<i class="fa-solid fa-trash ms-2 "></i></button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
+
+                        {!username && (
+                            navigate('/')
+                        )}
+
                     </>
                 ))}
             </>
