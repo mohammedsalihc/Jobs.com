@@ -1,7 +1,7 @@
 import React from 'react'
 import { useContext } from 'react'
-import Blogs from './Jobs'
 import { UserContext } from './context/userContext'
+import Jobs from './Jobs'
 
 function Home() {
     const { setUserInfo, userInfo } = useContext(UserContext)
@@ -18,7 +18,7 @@ function Home() {
                 </div>
             </div>
             {username && (
-                <Blogs />
+                <Jobs />
             )}
 
         </div>
